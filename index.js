@@ -20,22 +20,31 @@ const level = { // the - rod
   "rod on a": "fishing rods" // very op don't ask why
 };
 
+let data;
 
-let rod  = 0,
-    money = 0,
-    bait = 0; // measures how much bait you have. can be made using 21 money.
+let save = rl.keyInYN("Do you have a save? ");
+if (save)
+  data = rl.question("Please paste your save here. (to paste in a terminal use Shift-Insert)\n> ").split(/[$\[\]:]/g).map(i => Number(i));
+else
+  data = Array(10).fill(0);
+
+console.clear();
+
+let rod  = data[0],
+    money = data[1],
+    bait = data[data.length - 1]; // measures how much bait you have. can be made using 21 money.
 
 const cost = 21;
 
 
 const fish = {
-  salmon: 0,
-  trout: 0,
-  cod: 0,
-  mackerel: 0,
-  haddock: 0,
-  whitebait: 0,
-  carp: 0, // the op fish start here
+  salmon: data[2],
+  trout: data[3],
+  cod: data[4],
+  mackerel: data[5],
+  haddock: data[6],
+  whitebait: data[7],
+  carp: data[8], // the op fish start here
 }
 
 
@@ -46,9 +55,6 @@ let cast = () => {
 
   let caught = load.calculate(tbl);
   console.log(`You caught some ${caught}!\n`);
-
-  
-
 
   if (Object.values(level)[rod + 1] === caught) {
     let ify = rl.keyInYN(`You can upgrade your rod now, to fish better items. Do it now, or sell the ${caught}?\n> `);
