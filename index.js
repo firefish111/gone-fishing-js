@@ -16,7 +16,7 @@ const level = { // the - rod
   "ruby": "ruby",
   "emerald": "emerald",
   "sapphire": "sapphire",
-  "diamond": "diamond",
+  "diamond": "diamonds",
   "rod on a": "fishing rods" // very op don't ask why
 };
 
@@ -98,5 +98,6 @@ while (true) {
     }
   } else if (input == "x") {
     console.log(`\n\n\n\n\n\n\n\nGoodbye. Here is your save:\n\n\n\n${rod.toString(16)}\$${money}[${Object.values(fish).join(":")}]${bait}`);
+    process.exit()
   }
 }
