@@ -24,9 +24,8 @@ let data;
 
 let save = rl.keyInYN("Do you have a save? ");
 if (save)
-  data = rl.question("Please paste your save here. (to paste in a terminal use Shift-Insert)\n> ").split(/[$\[\]:]/g).map(i => Number(i));
-else
-  data = Array(10).fill(0);
+  data = rl.question("Please paste your save here. (to paste in a terminal use Shift-Insert)\n> ").split(/[$\[\]:]/g).map((i, ix) => ix == 0 ? parseInt(i, 16) : Number(i));
+else data = Array(10).fill(0);
 
 console.clear();
 
@@ -34,7 +33,7 @@ let rod  = data[0],
     money = data[1],
     bait = data[data.length - 1]; // measures how much bait you have. can be made using 21 money.
 
-const cost = 21;
+const cost = 21; // cost in $ of the bait
 
 
 const fish = {
@@ -44,6 +43,9 @@ const fish = {
   mackerel: data[5],
   haddock: data[6],
   whitebait: data[7],
+}
+
+const opfish = {
   carp: data[8], // the op fish start here
 }
 
@@ -97,7 +99,7 @@ while (true) {
       }
     }
   } else if (input == "x") {
-    console.log(`\n\n\n\n\n\n\n\nGoodbye. Here is your save:\n\n\n\n${rod.toString(16)}\$${money}[${Object.values(fish).join(":")}]${bait}`);
+    console.log(`\n\n\n\n\n\n\n\nGoodbye. Here is your save:\n\n\n\n${rod.toString(16)}\$${money}[${Object.values(fish).join(":")}][${Object.values(fish).join(":")}${bait}`);
     process.exit()
   }
 }
