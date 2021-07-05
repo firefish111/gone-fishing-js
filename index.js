@@ -13,6 +13,7 @@ const level = { // the - rod
   "silver": "silver",
   "golden": "gold",
   "platinum": "platinum",
+  // rods from here can fish using bait
   "ruby": "ruby",
   "emerald": "emerald",
   "sapphire": "sapphire",
@@ -24,7 +25,7 @@ let data;
 
 let save = rl.keyInYN("Do you have a save? ");
 if (save)
-  data = rl.question("Please paste your save here. (to paste in a terminal use Shift-Insert)\n> ").split(/[$\[\]:]/g).map((i, ix) => ix == 0 ? parseInt(i, 16) : Number(i));
+  data = rl.question("Please paste your save here. (to paste in a terminal use Shift-Insert)\n> ").split(/[$\[\]:]/g).map((i, ix) => ix === 0 ? parseInt(i, 16) : Number(i));
 else data = Array(10).fill(0);
 
 console.clear();
@@ -42,11 +43,11 @@ const fish = {
   cod: data[4],
   mackerel: data[5],
   haddock: data[6],
-  whitebait: data[7],
 }
 
+// op fish, that can be caught with bait
 const opfish = {
-  carp: data[8], // the op fish start here
+  carp: data[7],
 }
 
 
@@ -54,8 +55,25 @@ let tbl = load.rodtable(rod);
 
 let cast = () => {
   console.log(`\nCasting your ${Object.keys(level)[rod]} rod...\n`);
+  
+  let caught; // yesn't
+  if (rod > 10) {
+    let baityn = rl.keyInYN(`Use some bait to catch better fish?\n\t(You can't catch rod upgrades when using bait)`);
+    
+    if (baityn) {
+      if (bait > 0) {
+        caught = load.calculate(tbl.bait)
+      } else {
+        console.log("You can't afford any bait. You can buy bait at the market for $21 per piece.");
+        return;
+      } 
+    } else {
+      caught = load.calculate(tbl.norm);
+    }
+  } else {
+    caught = load.calculate(tbl);
+  }
 
-  let caught = load.calculate(tbl);
   console.log(`You caught some ${caught}!\n`);
 
   if (Object.values(level)[rod + 1] === caught) {
@@ -85,7 +103,7 @@ while (true) {
 
   let input = rl.question("> ");
 
-  if (input == "") {
+  if (input === "") {
     cast();
   } else if (input == "m") {
     console.log(`You have \$${money}. Here is your fish:`, fish);
@@ -96,8 +114,10 @@ while (true) {
       if (amount <= Math.floor(money / cost)) {
         money -= amount * cost;
         bait += amount;
+      } else {
+        console.log("Unfortunately, you can't afford that much bait.\n\tEither try buying less, or try selling some of your fish.");
       }
-    }
+    } else console.log("You can't afford any bait. Bait costs $21 per piece ")
   } else if (input == "x") {
     console.log(`\n\n\n\n\n\n\n\nGoodbye. Here is your save:\n\n\n\n${rod.toString(16)}\$${money}[${Object.values(fish).join(":")}][${Object.values(fish).join(":")}${bait}`);
     process.exit()
