@@ -26,7 +26,7 @@ let data;
 let save = rl.keyInYN("Do you have a save? ");
 if (save)
   data = rl.question("Please paste your save here. (to paste in a terminal use Shift-Insert)\n> ").split(/[$\[\]:]/g).map((i, ix) => ix === 0 ? parseInt(i, 16) : Number(i));
-else data = Array(10).fill(0);
+else data = Array(14).fill(0);
 
 console.clear();
 
@@ -39,7 +39,7 @@ const cost = 21; // cost in $ of the bait
 
 const fish = {
   salmon: data[2],
-  trout: data[3],
+  tuna: data[3],
   cod: data[4],
   mackerel: data[5],
   haddock: data[6],
@@ -48,6 +48,9 @@ const fish = {
 // op fish, that can be caught with bait
 const opfish = {
   carp: data[7],
+  trout: data[8],
+  whale: data[9],
+  shark: data[10],
 }
 
 
@@ -56,13 +59,15 @@ let tbl = load.rodtable(rod);
 let cast = () => {
   console.log(`\nCasting your ${Object.keys(level)[rod]} rod...\n`);
   
-  let caught; // yesn't
+  let caught,
+      baityn = false; // yesn't
   if (rod > 10) {
-    let baityn = rl.keyInYN(`Use some bait to catch better fish?\n\t(You can't catch rod upgrades when using bait)`);
+    baityn = rl.keyInYN(`Use some bait to catch better fish?\n\t(You can't catch rod upgrades when using bait)`);
     
     if (baityn) {
       if (bait > 0) {
-        caught = load.calculate(tbl.bait)
+        caught = load.calculate(tbl.bait);
+        bait--;
       } else {
         console.log("You can't afford any bait. You can buy bait at the market for $21 per piece.");
         return;
@@ -92,7 +97,7 @@ let cast = () => {
     money += j;
     console.log(`You sold the junk for \$${j}!`)
   } else {
-    fish[caught]++;
+    (baityn ? opfish : fish)[caught]++;
   }
 } 
 
@@ -106,7 +111,7 @@ while (true) {
   if (input === "") {
     cast();
   } else if (input == "m") {
-    console.log(`You have \$${money}. Here is your fish:`, fish);
+    console.log(`You have \$${money}. You have ${bait} bait.\n\n`);
     if (money >= cost) {
       console.log(`\n\n\nYou can buy ${Math.floor(money / cost)} bait.`);
       let amount = Number(rl.question("How much bait would you like to buy? "));
@@ -119,7 +124,7 @@ while (true) {
       }
     } else console.log("You can't afford any bait. Bait costs $21 per piece ")
   } else if (input == "x") {
-    console.log(`\n\n\n\n\n\n\n\nGoodbye. Here is your save:\n\n\n\n${rod.toString(16)}\$${money}[${Object.values(fish).join(":")}][${Object.values(fish).join(":")}${bait}`);
+    console.log(`\n\n\n\n\n\n\n\nGoodbye. Here is your save:\n\n\n\n${rod.toString(16)}\$${money}[${Object.values(fish).join(":")}][${Object.values(opfish).join(":")}]${bait}`);
     process.exit()
   }
 }
