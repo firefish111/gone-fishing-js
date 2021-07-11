@@ -53,6 +53,13 @@ const opfish = {
   shark: data[10],
 }
 
+const sellprice = {
+  carp: 15, // $15 per carp
+  trout: 25, // $25 per trout
+  whale: 40, // $40 per whale
+  shark: 60 + Math.ceil(Math.random() * 10), // $60 - $170 per shark
+}
+
 
 let tbl = load.rodtable(rod);
 
@@ -69,7 +76,7 @@ let cast = () => {
         caught = load.calculate(tbl.bait);
         bait--;
       } else {
-        console.log("You can't afford any bait. You can buy bait at the market for $21 per piece.");
+        console.log("You don't have any bait. You can buy bait at the market for $21 per piece.");
         return;
       } 
     } else {
@@ -112,6 +119,7 @@ while (true) {
     cast();
   } else if (input == "m") {
     console.log(`You have \$${money}. You have ${bait} bait.\n\n`);
+
     if (money >= cost) {
       console.log(`\n\n\nYou can buy ${Math.floor(money / cost)} bait.`);
       let amount = Number(rl.question("How much bait would you like to buy? "));
@@ -122,7 +130,30 @@ while (true) {
       } else {
         console.log("Unfortunately, you can't afford that much bait.\n\tEither try buying less, or try selling some of your fish.");
       }
-    } else console.log("You can't afford any bait. Bait costs $21 per piece ")
+    } else console.log("You can't afford any bait. Bait costs $21 per piece.")
+
+
+    if (!(Object.values(opfish).every(ky => ky === 0))) {
+      console.log("\n\n\n\nIt seems as if you have some big fish to sell. Here is what you have:")
+
+      for (let bigfish in opfish) {
+        console.log(`You have ${opfish[bigfish]} ${bigfish}, which you can sell for \$${sellprice[bigfish]} per piece`);
+      }
+
+      console.log("What would you like to sell?")
+
+      Object.keys(opfish).forEach((itm, ix) => {
+        console.log(`\tPress ${ix+1} to sell ${itm},`)
+      });
+      console.log("Or press enter to not sell anything.")
+
+      let ip = rl.question("> ");
+      try {
+        ip = Number(ip);
+      } catch {
+        console.log("\x1b[38;5;1mDEBUG: Not selling anything.")
+      }
+    }
   } else if (input == "x") {
     console.log(`\n\n\n\n\n\n\n\nGoodbye. Here is your save:\n\n\n\n${rod.toString(16)}\$${money}[${Object.values(fish).join(":")}][${Object.values(opfish).join(":")}]${bait}`);
     process.exit()
