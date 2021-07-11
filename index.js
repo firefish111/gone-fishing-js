@@ -47,10 +47,10 @@ const fish = {
 
 // op fish, that can be caught with bait
 const opfish = {
-  carp: data[7],
-  trout: data[8],
-  whale: data[9],
-  shark: data[10],
+  carp: data[8],
+  trout: data[9],
+  whale: data[10],
+  shark: data[11],
 }
 
 const sellprice = {
@@ -60,6 +60,7 @@ const sellprice = {
   shark: 60 + Math.ceil(Math.random() * 10), // $60 - $170 per shark
 }
 
+console.log(data)
 
 let tbl = load.rodtable(rod);
 
@@ -149,10 +150,25 @@ while (true) {
 
       let ip = rl.question("> ");
       try {
-        ip = Number(ip);
-      } catch {
-        console.log("\x1b[38;5;1mDEBUG: Not selling anything.")
+        ip = Number(ip) - 1;
+        let inq = Object.keys(opfish)[ip];
+
+        if (ip >= inq.length)
+          throw ip;
+        
+        let amnt = Number(rl.question(`How much ${inq} would you like to sell? (you currently have ${opfish[inq]})`));
+        
+        if (amnt > opfish[inq]) {
+          console.log(`You don't have that much ${inq}!`);
+          throw ammt;
+        } else {
+          opfish[inq] -= amnt;
+          money += sellprice[inq] * amnt;
+        }
+      } catch (e) {
+        console.log("\x1b[38;5;1mDEBUG: Not selling anything.\x1b[0m", e);
       }
+      
     }
   } else if (input == "x") {
     console.log(`\n\n\n\n\n\n\n\nGoodbye. Here is your save:\n\n\n\n${rod.toString(16)}\$${money}[${Object.values(fish).join(":")}][${Object.values(opfish).join(":")}]${bait}`);
