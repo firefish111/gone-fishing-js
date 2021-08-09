@@ -59,8 +59,6 @@ const cost = 21, // cost in $ of the bait
     shark: 60 + Math.ceil(Math.random() * 10), // $60 - $170 per shark
   };
 
-console.log(data);
-
 let tbl = load.rodtable(rod);
 
 const cast = () => {
@@ -101,6 +99,10 @@ const cast = () => {
     const j = Math.ceil(Math.random() * 5);
     money += j;
     console.log(`You sold the junk for \$${j}!`);
+  } else if (caught === "money") {
+    const k = Math.ceil(Math.random() * 10) * 10;
+    money += k;
+    console.log(`You caught some money! You take the \$${k}.`);
   } else {
     (baityn ? opfish : fish)[caught]++;
   }
