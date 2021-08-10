@@ -27,7 +27,7 @@ const save = rl.keyInYN("Do you have a save? ");
 if (save) {
   data = rl
       .question("Please paste your save here. (to paste in a terminal use Shift-Insert)\n> ")
-      .split(/[$\[\]:]/g)
+      .split(/[$\[\]:]+/g)
       .map((i, ix) => ix === 0 ? parseInt(i, 16) : Number(i));
 } else data = Array(14).fill(0);
 
@@ -47,10 +47,10 @@ const cost = 21, // cost in $ of the bait
     haddock: data[6],
   },
   opfish = {
-    carp: data[8],
-    trout: data[9],
-    whale: data[10],
-    shark: data[11],
+    carp: data[7],
+    trout: data[8],
+    whale: data[9],
+    shark: data[10],
   },
   sellprice = {
     carp: 15, // $15 per carp
@@ -58,8 +58,6 @@ const cost = 21, // cost in $ of the bait
     whale: 40, // $40 per whale
     shark: 60 + Math.ceil(Math.random() * 10), // $60 - $170 per shark
   };
-
-console.log(data);
 
 let tbl = load.rodtable(rod);
 
@@ -101,6 +99,10 @@ const cast = () => {
     const j = Math.ceil(Math.random() * 5);
     money += j;
     console.log(`You sold the junk for \$${j}!`);
+  } else if (caught === "money") {
+    const k = Math.ceil(Math.random() * 10) * 10;
+    money += k;
+    console.log(`You caught some money! You take the \$${k}.`);
   } else {
     (baityn ? opfish : fish)[caught]++;
   }
@@ -147,6 +149,7 @@ while (true) {
 
       let ip = rl.question("> ");
       try {
+        if (ip === "") throw "e";
         ip = Number(ip) - 1;
         const inq = Object.keys(opfish)[ip];
 

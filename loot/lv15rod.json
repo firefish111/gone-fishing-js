@@ -1,0 +1,17 @@
+{
+  "norm": {
+    "salmon": 0.06,
+    "money": 0.1,
+    "tuna": 0.12,
+    "cod": 0.17,
+    "mackerel": 0.25,
+    "haddock": 0.3
+  },
+  "bait": {
+    "shark": 0.25,
+    "whale": 0.25,
+    "trout": 0.25,
+    "carp": 0.25
+  }
+}
+

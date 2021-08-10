@@ -1,0 +1,14 @@
+{
+  "norm": {
+    "junk": 0.25,
+    "haddock": 0.3510,
+    "fishing rods": 0.399
+  },
+  "bait": {
+    "shark": 0.1406,
+    "whale": 0.1904,
+    "trout": 0.369,
+    "carp": 0.5
+  }
+}
+
